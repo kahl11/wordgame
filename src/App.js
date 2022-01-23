@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import {words} from './words.js'
+import axios from "axios";
+
 const checkWord = (checkWord, actualWord) => {
   let flags = [0, 0, 0, 0, 0];
   for (let i = 0; i < actualWord.length; i++) {
@@ -10,17 +11,67 @@ const checkWord = (checkWord, actualWord) => {
   }
   return flags;
 };
+
+const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrRow) => {
+  let submittedWord = "";
+  for (let i = 0; i < wordLength; i++) {
+    submittedWord = submittedWord.concat(
+      itemsRef.current[i + currRow * 5].value
+    );
+  }
+  let resp = await axios.get(`http://words.bookheroapp.com/checkWord?word=${submittedWord}`);
+  let check = false;
+  if (resp) check = resp.data;
+  if (!check) {
+    infoSpan.current.innerText = "That is not a valid word";
+    return;
+  } else {
+    infoSpan.current.innerText = "";
+  }
+  let result = checkWord(submittedWord, word);
+  // console.log(result);
+  for (let i = 0; i < result.length; i++) {
+    if (word.includes(submittedWord[i])) {
+      itemsRef.current[i + currRow * 5].style.backgroundColor =
+        "yellow";
+    }
+    if (result[i] === 1) {
+      itemsRef.current[i + currRow * 5].style.backgroundColor = "green";
+    }
+  }
+  if (!result.includes(0)) {
+    // console.log("winner");
+  } else if (currRow < 5) {
+    setCurrRow(currRow + 1);
+  } else {
+    infoSpan.current.innerText = "Game Over"
+  }
+}
+
 function App() {
   const itemsRef = useRef([]);
   const infoSpan = useRef(null);
   const [wordLength] = useState(5);
   const [word, setWord] = useState("");
   const [currRow, setCurrRow] = useState(0);
+  const enterButton = useRef(null);
   useEffect(() => {
+    function downHandler({ key }) {
+      if (key === "Enter") {
+        if (enterButton.current)
+          enterButton.current.click()
+        console.log("entered");
+      }
+    }
+    window.addEventListener("keydown", downHandler);
     itemsRef.current = itemsRef.current.slice(0, 30);
-    let w = words[Math.floor(Math.random() * words.length)];
-    console.log(w);
-    setWord(w);
+    axios.get('http://words.bookheroapp.com/generateWord').then((resp) => {
+      console.log(resp.data)
+      setWord(resp.data)
+    });
+    return () => {
+      window.removeEventListener("keydown", downHandler);
+    };
   }, []);
   useEffect(() => {
     itemsRef.current[currRow * 5].focus();
@@ -69,38 +120,9 @@ function App() {
       </div>
       <button
         className="mt-8 float-left ml-4 border-2 border-gray-500 px-8 rounded-lg bg-slate-300"
-        onClick={(e) => {
-          let submittedWord = "";
-          for (let i = 0; i < wordLength; i++) {
-            submittedWord = submittedWord.concat(
-              itemsRef.current[i + currRow * 5].value
-            );
-          }
-          if(!words.includes(submittedWord)){
-            infoSpan.current.innerText = "That is not a valid word";
-            return;
-          }else{
-            infoSpan.current.innerText = "";
-          }
-          let result = checkWord(submittedWord, word);
-          // console.log(result);
-          for (let i = 0; i < result.length; i++) {
-            if (word.includes(submittedWord[i])) {
-              itemsRef.current[i + currRow * 5].style.backgroundColor =
-                "yellow";
-            }
-            if (result[i] === 1) {
-              itemsRef.current[i + currRow * 5].style.backgroundColor = "green";
-            }
-          }
-          if (!result.includes(0)) {
-            // console.log("winner");
-          } else if (currRow < 5) {
-            setCurrRow(currRow + 1);
-          } else {
-            e.target.style.backgroundColor = "red";
-            e.target.innerText = "Game Over";
-          }
+        ref={enterButton}
+        onClick={() => {
+          enterFunc(wordLength, itemsRef, currRow, infoSpan, word, setCurrRow);
         }}
       >
         Enter
