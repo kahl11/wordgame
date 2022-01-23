@@ -85,7 +85,7 @@ function App() {
                 return (
                   <div
                     key={`cell-${index}`}
-                    className="bg-gray-500 border-2 border-gray-900 w-12 h-12 m-2 border-r-2"
+                    className="bg-gray-200 border-2 border-gray-900 w-12 h-12 m-2 border-r-2"
                   >
                     <input
                       disabled={row !== currRow}
