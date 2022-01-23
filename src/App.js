@@ -40,11 +40,11 @@ const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrR
     }
   }
   if (!result.includes(0)) {
-    // console.log("winner");
+    infoSpan.current.innerText = "WINNER!";
   } else if (currRow < 5) {
     setCurrRow(currRow + 1);
   } else {
-    infoSpan.current.innerText = "Game Over"
+    infoSpan.current.innerText = "Game Over";
   }
 }
 
