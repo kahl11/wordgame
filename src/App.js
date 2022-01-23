@@ -28,8 +28,7 @@ const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrR
   } else {
     infoSpan.current.innerText = "";
   }
-  let result = checkWord(submittedWord, word);
-  console.log(submittedWord, word)
+  let result = checkWord(submittedWord.toLowerCase(), word);
   console.log(result);
   for (let i = 0; i < result.length; i++) {
     if (word.includes(submittedWord[i])) {
