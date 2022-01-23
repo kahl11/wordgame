@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 const randomWords = require("random-words");
-var checkWordLib = require("check-if-word"),
-  validWords = checkWordLib("en");
 const checkWord = (checkWord, actualWord) => {
   let flags = [0, 0, 0, 0, 0];
   for (let i = 0; i < actualWord.length; i++) {
@@ -84,12 +82,12 @@ function App() {
               itemsRef.current[i + currRow * 5].value
             );
           }
-          if(!validWords.check(submittedWord)){
-            infoSpan.current.innerText = "That is not a valid word";
-            return;
-          }else{
-            infoSpan.current.innerText = "";
-          }
+          // if(!validWords.check(submittedWord)){
+          //   infoSpan.current.innerText = "That is not a valid word";
+          //   return;
+          // }else{
+          //   infoSpan.current.innerText = "";
+          // }
           let result = checkWord(submittedWord, word);
           // console.log(result);
           for (let i = 0; i < result.length; i++) {
