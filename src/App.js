@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-const randomWords = require("random-words");
+import {words} from './words.js'
 const checkWord = (checkWord, actualWord) => {
   let flags = [0, 0, 0, 0, 0];
   for (let i = 0; i < actualWord.length; i++) {
@@ -13,22 +13,16 @@ const checkWord = (checkWord, actualWord) => {
 function App() {
   const itemsRef = useRef([]);
   const infoSpan = useRef(null);
-  const [wordLength,] = useState(5);
+  const [wordLength] = useState(5);
   const [word, setWord] = useState("");
   const [currRow, setCurrRow] = useState(0);
   useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, 30);
-
-    //very janky way of getting a 5 letter word
-    let w = randomWords({ exactly: 1, maxLength: 5 });
-    while (w[0].length !== 5) {
-      w = randomWords({ exactly: 1, maxLength: 5 });
-    }
-    setWord(w[0]);
-    // console.log(w);
+    let w = words[Math.floor(Math.random() * words.length)];
+    console.log(w);
+    setWord(w);
   }, []);
   useEffect(() => {
-    // console.log(itemsRef.current[(currRow + 1) * 5]);
     itemsRef.current[currRow * 5].focus();
   }, [currRow]);
   return (
@@ -82,12 +76,12 @@ function App() {
               itemsRef.current[i + currRow * 5].value
             );
           }
-          // if(!validWords.check(submittedWord)){
-          //   infoSpan.current.innerText = "That is not a valid word";
-          //   return;
-          // }else{
-          //   infoSpan.current.innerText = "";
-          // }
+          if(!words.includes(submittedWord)){
+            infoSpan.current.innerText = "That is not a valid word";
+            return;
+          }else{
+            infoSpan.current.innerText = "";
+          }
           let result = checkWord(submittedWord, word);
           // console.log(result);
           for (let i = 0; i < result.length; i++) {
