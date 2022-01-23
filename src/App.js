@@ -16,7 +16,7 @@ const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrR
   let submittedWord = "";
   for (let i = 0; i < wordLength; i++) {
     submittedWord = submittedWord.concat(
-      itemsRef.current[i + currRow * 5].value
+      itemsRef.current[i + currRow * 5].value.toLowerCase()
     );
   }
   let resp = await axios.get(`https://words.bookheroapp.com/checkWord?word=${submittedWord}`);
@@ -29,7 +29,6 @@ const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrR
     infoSpan.current.innerText = "";
   }
   let result = checkWord(submittedWord.toLowerCase(), word);
-  console.log(result);
   for (let i = 0; i < result.length; i++) {
     if (word.includes(submittedWord[i])) {
       itemsRef.current[i + currRow * 5].style.backgroundColor =
