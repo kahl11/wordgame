@@ -6,7 +6,7 @@ var checkWordLib = require("check-if-word"),
 const checkWord = (checkWord, actualWord) => {
   let flags = [0, 0, 0, 0, 0];
   for (let i = 0; i < actualWord.length; i++) {
-    if (checkWord[i] == actualWord[i]) {
+    if (checkWord[i] === actualWord[i]) {
       flags[i] = 1;
     }
   }
@@ -15,7 +15,7 @@ const checkWord = (checkWord, actualWord) => {
 function App() {
   const itemsRef = useRef([]);
   const infoSpan = useRef(null);
-  const [wordLength, setWordLength] = useState(5);
+  const [wordLength,] = useState(5);
   const [word, setWord] = useState("");
   const [currRow, setCurrRow] = useState(0);
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
                       maxLength="1"
                       className="w-full h-full bg-transparent text-lg text-center"
                       onKeyDown={(e) => {
-                        if (e.nativeEvent.keyCode == 8) {
+                        if (e.nativeEvent.keyCode === 8) {
                           // console.log(e.)
                           if (index === 0) {
                             return;
