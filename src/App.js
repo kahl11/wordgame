@@ -19,7 +19,7 @@ const enterFunc = async (wordLength, itemsRef, currRow, infoSpan, word, setCurrR
       itemsRef.current[i + currRow * 5].value
     );
   }
-  let resp = await axios.get(`http://words.bookheroapp.com/checkWord?word=${submittedWord}`);
+  let resp = await axios.get(`https://words.bookheroapp.com/checkWord?word=${submittedWord}`);
   let check = false;
   if (resp) check = resp.data;
   if (!check) {
@@ -65,7 +65,7 @@ function App() {
     }
     window.addEventListener("keydown", downHandler);
     itemsRef.current = itemsRef.current.slice(0, 30);
-    axios.get('http://words.bookheroapp.com/generateWord').then((resp) => {
+    axios.get('https://words.bookheroapp.com/generateWord').then((resp) => {
       console.log(resp.data)
       setWord(resp.data)
     });
