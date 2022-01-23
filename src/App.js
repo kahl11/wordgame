@@ -91,7 +91,7 @@ function App() {
                       disabled={row !== currRow}
                       ref={(el) => (itemsRef.current[index + row * 5] = el)}
                       maxLength="1"
-                      className="w-full h-full bg-transparent text-lg text-center"
+                      className="w-full h-full bg-transparent text-lg text-center disabled:text-black"
                       onKeyDown={(e) => {
                         if (e.nativeEvent.keyCode === 8) {
                           // console.log(e.)
